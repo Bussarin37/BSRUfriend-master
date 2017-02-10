@@ -43,6 +43,8 @@ public class SignUpActivity extends AppCompatActivity {
                 //Check Space
                 if(nameString.equals("") || userString.equals("")){
                     //True ==> Have Space
+                    MyAlert myAlert = new MyAlert(SignUpActivity.this);
+                    myAlert.myDialog("มีช่องว่าง","กรุณากรอกทให้ครบทุกช่อง");
 
 
                 }
