@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,10 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.jibble.simpleftp.SimpleFTP;
+
+import java.io.File;
+
 public class SignUpActivity extends AppCompatActivity {
 
     //Explicit
@@ -27,9 +32,10 @@ public class SignUpActivity extends AppCompatActivity {
     private ImageView imageView;
     private RadioGroup radioGroup;
     private Button button;
-    private String nameString, userString, passString,pathImageString;
+    private String nameString, userString, passString,pathImageString,nameImageString;
     private Uri uri;
     private  boolean aBoolean = true;
+    private int anInt = 0;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -54,12 +60,43 @@ public class SignUpActivity extends AppCompatActivity {
 
         //Im
         imageController();
+        //radioController
+        radioController();
+
 
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }//Main Method
+    private void radioController() {
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
+                switch (i) {
+                    case R.id.radioButton:
+                        anInt = 0;
+                        break;
+                    case R.id.radioButton2:
+                        anInt = 1;
+                        break;
+                    case R.id.radioButton3:
+                        anInt = 2;
+                        break;
+                    case R.id.radioButton4:
+                        anInt = 3;
+                        break;
+                    case R.id.radioButton5:
+                        anInt = 4;
+                        break;
+                }   // switch
+
+            }   // onChecked
+        });
+
+    }   // radioController
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -117,19 +154,68 @@ public class SignUpActivity extends AppCompatActivity {
                 if (nameString.equals("") || userString.equals("")) {
                     //True ==> Have Space
                     MyAlert myAlert = new MyAlert(SignUpActivity.this);
-                    myAlert.myDialog("มีช่องว่าง", "กรุณากรอกทให้ครบทุกช่อง");
+                    myAlert.myDialog("มีช่องว่าง", "กรุณากรอกให้ครบทุกช่อง");
                 } else if (aBoolean) {
                     //Non Choose image
                     MyAlert myAlert = new MyAlert(SignUpActivity.this);
                     myAlert.myDialog("ยังไม่เลือกรูปภาพ","กรุณาเลือกรูปภาพ");
                 }else {
-                    //EverThing ok
+                    //EveryThing ok
+                    uploadValueToServer();
                 }
             }//onClick
         });
 
 
     }
+
+    private void uploadValueToServer() {
+
+        try {
+            //upload Image
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy
+                    .Builder()
+                    .permitAll()
+                    .build();
+            StrictMode.setThreadPolicy(policy);
+            SimpleFTP simpleFTP = new SimpleFTP();
+            simpleFTP.connect("ftp.swiftcodingthai.com",21,
+                    "bsru@swiftcodingthai.com","Abc12345");
+            simpleFTP.bin();
+            simpleFTP.cwd("Image_Jeejee");
+            simpleFTP.stor(new File(pathImageString));
+            simpleFTP.disconnect();
+            //Upload Text
+            String tag = "10febV2";
+            Log.d(tag, "Name ==>" +nameString);
+            Log.d(tag, "User ==>" +userString);
+            Log.d(tag, "Password ==>" +passString);
+
+            nameImageString = "http://swiftcodingthai.com/bsru/Image_Jeejee"+ pathImageString.substring(pathImageString.lastIndexOf("/"));
+            Log.d(tag, "Image ==> "+ nameImageString);
+            Log.d(tag, "Avata ==> "+ anInt);
+
+            AddValueToUser addValueToUser = new AddValueToUser(SignUpActivity.this,
+                    nameString,userString,passString,nameImageString,
+                    Integer.toString(anInt));
+            addValueToUser.execute("http://swiftcodingthai.com/bsru/Image_Jeejee");
+            String s = addValueToUser.get(s);
+            Log.d(tag, "Result ==> +s");
+
+            if (Boolean.parseBoolean(s)){
+                finish();
+            }else {
+                MyAlert myAlert = new MyAlert(SignUpActivity.this);
+                myAlert.myDialog("cannot upload","upload false");
+
+            }
+
+
+
+        }catch (Exception e){
+            Log.d("10fabV1","e upload ==>" +e.toString());
+        }
+    }//upload
 
     private void bindWidget() {
         nameEditText = (EditText) findViewById(R.id.editText3);
