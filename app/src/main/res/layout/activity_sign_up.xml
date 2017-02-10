@@ -86,13 +86,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <Button
-        android:text="@string/sign_up"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/button3"
-        android:layout_alignParentBottom="true" />
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -145,13 +138,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginLeft="20dp">
+            android:layout_marginLeft="20dp"
+            android:id="@+id/ragAvata">
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/radioButton"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:contextClickable="true"
+                android:checked="true" />
 
             <RadioButton
                 android:layout_width="wrap_content"
@@ -178,4 +174,13 @@
                 android:layout_weight="1" />
         </RadioGroup>
     </LinearLayout>
+
+    <Button
+        android:text="@string/sign_up"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button3"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
