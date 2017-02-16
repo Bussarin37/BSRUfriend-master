@@ -199,7 +199,7 @@ public class SignUpActivity extends AppCompatActivity {
                     nameString,userString,passString,nameImageString,
                     Integer.toString(anInt));
             addValueToUser.execute("http://swiftcodingthai.com/bsru/Image_Jeejee");
-            String s = addValueToUser.get(s);
+            String s = addValueToUser.get();
             Log.d(tag, "Result ==> +s");
 
             if (Boolean.parseBoolean(s)){
