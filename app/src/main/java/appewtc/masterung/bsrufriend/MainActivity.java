@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -84,14 +85,26 @@ public class MainActivity extends AppCompatActivity {
                 }//if
             }//for
             if (aBoolean) {
-                //user false
+                //User False
                 MyAlert myAlert = new MyAlert(MainActivity.this);
-                myAlert.myDialog("หา User ไม่เจอ ? ","ไม่มี"+ userString + "ในฐานข้อมูลของเรา");
+                myAlert.myDialog("หา User นี่ไม่เจอ ?", "ไม่มี " + userString + " ในฐานข้อมูลของเรา");
+            } else if (!passString.equals(loginString[3])) {
+                //Password False
+                MyAlert myAlert = new MyAlert(MainActivity.this);
+                myAlert.myDialog("Password False", "Please Try Again Password False");
+
+            } else {
+                //Password True
+                Toast.makeText(MainActivity.this, "Welcome " + loginString[1],
+                        Toast.LENGTH_SHORT).show();
+
             }
-        }catch (Exception e){
-            Log.d("16febV1","e checkUserPass ==>" +e.toString());
+
+
+        } catch (Exception e) {
+            Log.d("16febV1", "e checkUserPass ==> " + e.toString());
         }
 
-    }//checkUserPass
+    }   // checkUserPass
 
 }   // Main Class นี่คือ คลาสหลัก
